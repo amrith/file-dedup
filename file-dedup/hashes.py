@@ -8,10 +8,20 @@ import sys
 import json
 import utils
 
-def main(argv):
+def compute(argv, duplicates_only=True):
     hashes = utils.compute_hashes(argv[1])
 
-    json.dump(hashes, sys.stdout)
+    if duplicates_only:
+        dups = [k for k,v in hashes.iteritems() if len(v) > 1]
+    
+        dupdict = {}
+
+        for d in dups:
+            dupdict[d] = hashes[d]
+
+        json.dump(dupdict, sys.stdout)
+    else:
+        json.dump(hashes, sys.stdout)
 
 if __name__ == "__main__":
-    main(sys.argv)
+    compute(sys.argv)
