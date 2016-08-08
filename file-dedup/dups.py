@@ -16,9 +16,7 @@ def main(argv):
     for d in dups:
         duplist.append(hashes[d])
 
-    sorted(duplist, key=lambda x: sorted(x)[0])
-
-    for e in duplist:
+    for e in sorted(duplist, key=lambda x: sorted(x)[0]):
         print "Possible duplicate files:"
         for f in e:
             print "\t" + f
