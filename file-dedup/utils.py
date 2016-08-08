@@ -15,8 +15,6 @@ def md5(fname):
         for chunk in iter(lambda: f.read(4096), b""):
             hash_md5.update(chunk)
 
-    s = os.path.getsize(fname)
-    hash_md5.update(str(s))
     return hash_md5.hexdigest()
 
 def makepath(root, name):
