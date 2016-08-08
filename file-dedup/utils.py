@@ -10,6 +10,7 @@ import hashlib
 
 def md5(fname):
     hash_md5 = hashlib.md5()
+    sys.stderr.write('.')
     with open(fname, "rb") as f:
         for chunk in iter(lambda: f.read(4096), b""):
             hash_md5.update(chunk)
@@ -41,6 +42,7 @@ def compute_hashes(top=os.sep):
             s = os.path.getsize(path)
 
             if m in hashes.keys():
+                sys.stderr.write('+')
                 hashes[m].append(path)
             else:
                 hashes[m] = [path]
@@ -58,4 +60,5 @@ def main(argv):
 
         print "\n"
 
-main(sys.argv)
+if __name__ == "__main__":
+    main(sys.argv)
