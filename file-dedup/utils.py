@@ -10,7 +10,6 @@ import hashlib
 
 def md5(fname):
     hash_md5 = hashlib.md5()
-    sys.stderr.write('.')
     with open(fname, "rb") as f:
         for chunk in iter(lambda: f.read(4096), b""):
             hash_md5.update(chunk)
@@ -18,7 +17,7 @@ def md5(fname):
     return hash_md5.hexdigest()
 
 def makepath(root, name):
-    return root + os.sep + name
+    return os.path.abspath(os.path.expanduser(root + os.sep + name))
 
 # compute_hashes
 #
@@ -39,24 +38,20 @@ def compute_hashes(top=os.sep):
             m = md5(path)
             s = os.path.getsize(path)
 
+            e = { 'name': path, 'size': s }
             if m in hashes.keys():
-                sys.stderr.write('+')
-                hashes[m].append(path)
+                hashes[m].append(e)
             else:
-                hashes[m] = [path]
+                hashes[m] = [e]
 
     return hashes
 
-def main(argv):
-    hashes = compute_hashes(argv[1])
+def duplicate_hashes(top=os.sep):
+    h = compute_hashes(top)
+    dups = {}
 
-    dups = [k for k,v in hashes.iteritems() if len(v) > 1]
-    for d in dups:
-        print "Possible duplicate files"
-        for f in hashes[d]:
-            print "\t" + f
+    for k, v in h.iteritems():
+        if len(v) > 1:
+            dups[k] = v
 
-        print "\n"
-
-if __name__ == "__main__":
-    main(sys.argv)
+    return dups

@@ -10,9 +10,17 @@ import json
 import utils
 
 def compute(path):
-    hashes = utils.compute_hashes(path)
+    hashes = utils.duplicate_hashes(path)
 
-    json.dump(hashes, sys.stdout)
+    for k,v in hashes.iteritems():
+        print "Possibly duplicate files"
+        names = []
+        for e in v:
+            names.append(e['name'])
+
+        sn = sorted(names)
+        for n in sn:
+            print "\t%s" % n
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Compute file hashes.')
